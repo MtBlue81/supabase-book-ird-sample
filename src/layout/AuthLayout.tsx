@@ -1,4 +1,5 @@
 import { Auth, Button, IconLogOut } from '@supabase/ui';
+import { useEffect, useState } from 'react';
 import { Footer } from 'src/components/Footer';
 import { Header } from 'src/components/Header';
 import { LayoutErrorBoundary } from 'src/layout/LayoutErrorBoundary';
@@ -8,8 +9,19 @@ type Props = {
   children: React.ReactNode;
 };
 
+const useMountedState = () => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  return mounted;
+}
+
 export const AuthLayout = (props: Props) => {
   const { user } = Auth.useUser();
+  const mounted = useMountedState();
+
+  if (!mounted) return null; //'loading...';
 
   return (
     <div className="bg-gray-300">
@@ -37,6 +49,7 @@ export const AuthLayout = (props: Props) => {
             )}
           </LayoutErrorBoundary>
         </main>
+        <Footer/>
       </div>
     </div>
   );
